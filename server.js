@@ -8,12 +8,6 @@ let database = {
 };
 
 const routes = {
-  '/users': {
-    'POST': getOrCreateUser
-  },
-  '/users/:username': {
-    'GET': getUser
-  },
   '/articles': {
     'GET': getArticles,
     'POST': createArticle
@@ -23,12 +17,31 @@ const routes = {
     'PUT': updateArticle,
     'DELETE': deleteArticle
   },
+  '/articles/:id/downvote': {
+    'PUT': downvoteArticle
+  },
   '/articles/:id/upvote': {
     'PUT': upvoteArticle
   },
-  '/articles/:id/downvote': {
-    'PUT': downvoteArticle
-  }
+  '/comments': {
+    'POST': createComment
+  },
+  '/comments/:id': {
+    'PUT': updateComment,
+    'DELETE': deleteComment
+  },
+  '/comments/:id/downvote': {
+    'PUT': downvoteComment
+  },
+  '/comments/:id/upvote': {
+    'PUT': upvoteComment
+  },
+  '/users': {
+    'POST': getOrCreateUser
+  },
+  '/users/:username': {
+    'GET': getUser
+  },
 };
 
 function getUser(url, request) {
@@ -142,6 +155,10 @@ function createArticle(url, request) {
   return response;
 }
 
+function createComment() {
+
+}
+
 function updateArticle(url, request) {
   const id = Number(url.split('/').filter(segment => segment)[1]);
   const savedArticle = database.articles[id];
@@ -161,6 +178,10 @@ function updateArticle(url, request) {
   }
 
   return response;
+}
+
+function updateComment() {
+
 }
 
 function deleteArticle(url, request) {
@@ -186,6 +207,10 @@ function deleteArticle(url, request) {
   return response;
 }
 
+function deleteComment () {
+
+}
+
 function upvoteArticle(url, request) {
   const id = Number(url.split('/').filter(segment => segment)[1]);
   const username = request.body && request.body.username;
@@ -202,6 +227,14 @@ function upvoteArticle(url, request) {
   }
 
   return response;
+}
+
+function upvoteComment() {
+  
+}
+
+function downvoteComment() {
+
 }
 
 function downvoteArticle(url, request) {
