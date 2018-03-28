@@ -27,8 +27,8 @@ const routes = {
     'POST': createComment
   },
   '/comments/:id': {
-    'PUT': updateComment,
-    'DELETE': deleteComment
+    'DELETE': deleteComment,
+    'PUT': updateComment
   },
   '/comments/:id/downvote': {
     'PUT': downvoteComment
@@ -155,8 +155,36 @@ function createArticle(url, request) {
   return response;
 }
 
-function createComment() {
+function createComment(url, request) {
+  const requestComment = request.body && request.body.comment;
+  const response = {};
 
+  if (requestComment &&
+    requestComment.body &&
+    requestComment.articleId &&
+    requestComment.username &&
+    database.users[requestComment.username]) {
+
+    const comment = {
+      id: database.nextCommentId++,
+      body: requestComment.body,
+      username: requestComment.username,
+      articleId: requestComment.articleId,
+      upvotedBy: [],
+      downvotedBy: []
+    }
+
+    database.comments[comment.id] = comment;
+    database.users[comment.username].commentIds.push(comment.id);
+    database.articles[comment.articleId].commentIds.push(comment.id);
+
+    response.body = {comment: comment};
+    response.status = 201;
+  } else {
+    response.status = 400;
+  }
+
+  return response;
 }
 
 function updateArticle(url, request) {
@@ -230,7 +258,7 @@ function upvoteArticle(url, request) {
 }
 
 function upvoteComment() {
-  
+
 }
 
 function downvoteComment() {
