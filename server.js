@@ -13,7 +13,6 @@ function loadDatabase() {
   try {
     yaml.readSync('./the_scoop_db.yaml', 'utf8', (err, data) => {
       if (err) {
-        console.log('ERROR read', err);
         return err;
       } else {
         return data;
