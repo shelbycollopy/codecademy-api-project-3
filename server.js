@@ -1,4 +1,5 @@
-// database is let instead of const to allow us to modify it in test.js
+const yaml = require('node-yaml');
+
 let database = {
   articles: {},
   comments: {},
@@ -6,6 +7,30 @@ let database = {
   nextCommentId: 1,
   users: {},
 };
+
+function loadDatabase() {
+
+  try {
+    yaml.readSync('./the_scoop_db.yaml', 'utf8', (err, data) => {
+      if (err) {
+        return err;
+      } else {
+        return data;
+      }
+    });
+  } catch (e) {
+    return e;
+  }
+}
+
+function saveDatabase() {
+
+  yaml.writeSync('./the_scoop_db.yaml', database, 'utf-8', (err) => {
+    if (err) {
+      return err;
+    }
+  });
+}
 
 const routes = {
   '/articles': {
